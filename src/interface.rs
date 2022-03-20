@@ -4,10 +4,14 @@ use sysinfo::{NetworkData, NetworkExt, Networks};
 #[derive(Serialize)]
 pub struct NetworkInterfaceObject {
     name: String,
-    bytes_transmitted: u64,
-    bytes_recieved: u64,
-    packets_transmitted: u64,
-    packets_recieved: u64,
+    bytes: NetworkDataObject,
+    packets: NetworkDataObject
+}
+
+#[derive(Serialize)]
+struct NetworkDataObject {
+    transmitted: u64,
+    recieved: u64
 }
 
 pub fn create_interface_vec(networks: &Networks) -> Vec<NetworkInterfaceObject>{
@@ -19,16 +23,26 @@ pub fn create_interface_vec(networks: &Networks) -> Vec<NetworkInterfaceObject>{
     interface_objects
 }
 
+fn create_network_data_object(transmitted: u64, recieved: u64) -> NetworkDataObject {
+    NetworkDataObject {
+        transmitted: transmitted,
+        recieved: recieved
+    }
+}
+
 fn create_network_interface_object(
     interface_name: &String,
     data: &NetworkData, 
 ) -> NetworkInterfaceObject {
-    let interface = NetworkInterfaceObject {
+    NetworkInterfaceObject {
         name: interface_name.to_string(),
-        bytes_transmitted: data.total_transmitted(),
-        bytes_recieved: data.total_received(),
-        packets_transmitted: data.total_packets_transmitted(),
-        packets_recieved: data.total_packets_received(),
-    };
-    interface
+        bytes: create_network_data_object(
+            data.total_transmitted(), 
+    data.total_received()
+        ),
+        packets: create_network_data_object(
+            data.total_packets_transmitted(),
+    data.total_packets_received()
+        ),
+    }
 }
