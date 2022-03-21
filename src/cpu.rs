@@ -1,10 +1,12 @@
 use serde::Serialize;
 use sysinfo::{System, SystemExt, ProcessorExt, Processor};
+use std::env::consts::ARCH;
 
 #[derive(Serialize)]
 pub struct CpuObject {
     core_count: usize,
     total_utilization: f32,
+    architecture: String,
     processors: Vec<ProcessorObject>
 }
 
@@ -28,6 +30,7 @@ pub fn create_cpu_object(system: &System) -> CpuObject {
     CpuObject {
         core_count: get_physical_cores(system.physical_core_count()),
         total_utilization: cpu.cpu_usage(),
+        architecture: ARCH.to_string(),
         processors: processors,
     }
 }
