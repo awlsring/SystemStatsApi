@@ -1,18 +1,21 @@
 
+// External crates
 use actix_web::{get, web, Responder, HttpServer, App};
 use serde::Serialize;
 use sysinfo::{System, SystemExt};
 
+// Local modules
 mod interface;
 mod system;
-mod cpu;
 mod memory;
 mod disk;
+mod cpu_stats;
 
+// Module imports
+use cpu_stats::cpu::{CpuObject, create_cpu_object};
 use interface::{create_interface_vec, NetworkInterfaceObject};
 use disk::{create_disk_vec, DiskObject};
 use system::{create_system_object, SystemObject};
-use cpu::{CpuObject, create_cpu_object};
 use memory::{MemoryObject, create_memory_object, create_swap_object};
 
 #[derive(Serialize)]
