@@ -10,7 +10,7 @@ pub struct CpuObject {
     temperature: String,
     architecture: String,
     vendor: String,
-    utiization: UtilizationObject,
+    utilization: UtilizationObject,
 }
 
 #[derive(Serialize)]
