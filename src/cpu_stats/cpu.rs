@@ -10,7 +10,7 @@ pub struct CpuObject {
     temperature: String,
     architecture: String,
     vendor: String,
-    utiization: UtilizationObject,
+    utilization: UtilizationObject,
 }
 
 #[derive(Serialize)]
@@ -33,7 +33,7 @@ pub fn create_cpu_object(system: &System) -> CpuObject {
         temperature: cpu_temp(),
         architecture: ARCH.to_string(),
         vendor: cpu.vendor_id().to_string(),
-        utiization: cpu_utilization,
+        utilization: cpu_utilization,
     }
 }
 
