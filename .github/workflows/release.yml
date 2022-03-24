@@ -71,9 +71,9 @@ jobs:
         ASSET_PATH="$src/target/${{ matrix.target }}/release/systemstats"
     - name: Release
       uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
+      # if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           ${{ env.ASSET_PATH }}
       env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
