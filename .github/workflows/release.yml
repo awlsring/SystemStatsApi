@@ -69,7 +69,7 @@ jobs:
     - name: Package Artifacts
       run: |
         src=$(pwd)
-        stage=
+        stage=test
         case $RUNNER_OS in
             Linux)
                 stage=$(mktemp -d)
