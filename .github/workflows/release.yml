@@ -27,12 +27,6 @@ jobs:
           target: armv7-unknown-linux-gnueabihf
           linker: gcc-arm-linux-gnueabihf
           cross: true
-        - build: aarch64
-          os: ubuntu-latest
-          rust: stable
-          target: aarch64-unknown-linux-gnu
-          linker: gcc-aarch64-linux-gnu
-          cross: true
 
     steps:
     - name: Checkout repository
@@ -80,14 +74,11 @@ jobs:
             Linux)
                 stage=$(mktemp -d)
                 ;;
-            macOS)
-                stage=$(mktemp -d -t tmp)
-                ;;
         esac
-        cp target/${{ matrix.target }}/release/SystemStatsApi $stage/
+        cp target/${{ matrix.target }}/release/systemstats $stage/
         cd $stage
         RELEASE_VERSION=${GITHUB_REF#refs/tags/}
-        ASSET_NAME="SystemStatsApi-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
+        ASSET_NAME="systemstats-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
         ASSET_PATH="$src/$ASSET_NAME"
         CHECKSUM_PATH="$ASSET_PATH.sha256"
         echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
