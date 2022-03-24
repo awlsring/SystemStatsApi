@@ -2,8 +2,8 @@ name: Release
 # Thanks https://www.rohanjain.in/cargo-cross/
 on:
   push:
-    - '*'
-    
+    tags:
+      - '*'
 env:
   CARGO_TERM_COLOR: always
 
