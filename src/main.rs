@@ -1,11 +1,12 @@
-
 // External crates
+use std::env;
+use log::info;
 use actix_web::{get, web, Responder, HttpServer, App};
 use serde::Serialize;
 use sysinfo::{System, SystemExt};
 
 // Local modules
-mod interface;
+mod interfaces;
 mod system;
 mod memory;
 mod disk;
@@ -13,7 +14,7 @@ mod cpu_stats;
 
 // Module imports
 use cpu_stats::cpu::{CpuObject, create_cpu_object};
-use interface::{create_interface_vec, NetworkInterfaceObject};
+use interfaces::{create_interface_vec, NetworkInterfaceObject, get_primary_interface};
 use disk::{create_disk_vec, DiskObject};
 use system::{create_system_object, SystemObject};
 use memory::{MemoryObject, create_memory_object, create_swap_object};
@@ -32,6 +33,8 @@ pub struct ResponseObject {
 async fn info() -> impl Responder {
     let mut sys = System::new_all();
     sys.refresh_all();
+
+    
     
     let res = ResponseObject {
         system: create_system_object(&sys),
@@ -47,11 +50,27 @@ async fn info() -> impl Responder {
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
+    
+
+    let interface = match env::var("SYSTEMSTATS_IP") {
+        Ok(val) => val,
+        Err(_e) => get_primary_interface(),
+    };
+
+    let port = match env::var("SYSTEMSTATS_PORT") {
+        Ok(val) => val,
+        Err(_e) => "7032".to_string(),
+    };
+
+    let ip = format!("{}:{}", interface, port);
+
+    info!("Starting on: {}", ip);
+
     HttpServer::new(|| {
         App::new()
             .service(info)
     })
-    .bind("127.0.0.1:7032")?
+    .bind(ip)?
     .run()
     .await
 }
